@@ -1,0 +1,9 @@
+{% if crawling_list %}
+    <ul>
+    {% for i in crawling_list %}
+        <li><a href="/detail/{{ i.id }}/">{{ i.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>질문이 없습니다.</p>
+{% endif %}

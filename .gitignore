@@ -1,0 +1,4 @@
+.idea
+thebon.db
+*.pyc
+__pycache__
