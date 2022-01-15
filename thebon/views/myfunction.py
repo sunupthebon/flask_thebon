@@ -33,6 +33,8 @@ def more_info(article_url) :
             
             if not article.summary:
                 print("article.summary가 비었습니다")
+                return ("Sorry. I failed to get the document.")
+
             else:
                 print(article.summary)
     except HTTPError as e:
@@ -373,7 +375,7 @@ def papago_translate(text, lan):  #파파고 번역
         return trans_data
     else:
         print("Error Code:", rescode)
-        return "번역에 실패했습니다"
+        return "Sorry. I failed to translate the document."
 
 
 
