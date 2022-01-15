@@ -5,8 +5,12 @@ from googleapiclient.discovery import build
 from urllib.request import HTTPError, URLError
 import pandas as pd
 from GoogleNews import GoogleNews
+import newspaper
 from newspaper import Article, Config
 import requests
+
+import nltk
+
 from googletrans import Translator  # 기본 구글 번역
 # from google.cloud import translate
 # from google.cloud import translate_v3beta1 as translate
@@ -14,44 +18,41 @@ from google.cloud import translate_v2 as translate
 # import six from google.cloud
 # import translate_v2 as translate
 
+# 내부서버 환경입니다
+from fake_useragent import UserAgent
+
 def more_info(article_url) :
 
-    article = Article(article_url)
+    # user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
+    ua = UserAgent(verify_ssl=False)
+    user_agent = ua.random
+    print(user_agent)
+
+    config = Config()
+    config.browser_user_agent = user_agent
+    config.request_timeout = 10    
+    article = Article(article_url, config=config)
+
     try:
             article.download()
-            print("download()")
-            try:
-                article.parse()
-                print("article.parse() succeed")
-            except:
-                print("article.parse() failed")
-            try:
-                article.nlp()
-                print("article.nlp() succeed")
-            except:
-                print("article.nlp() failed")
+            print("article.download() succeed")
+            article.parse()
+            print("article.parse() succeed")
+            article.nlp()
+            print("article.nlp() succeed")
             
-            if not article.summary:
-                print("article.summary가 비었습니다")
-                return (" ", "Sorry. I failed to get the document.")
-
-            else:
-                print(article.summary)
-    except HTTPError as e:
-            print('my message : page not found')
-    except URLError as e:
-            print('my message : The server could not be found!')
-    except HTTPError as e:
-            print("무슨 에러냐?" + e)
-    except newspaper.article.ArticleException as e:
-            print("ArticleException")
-            print(e)
+    except newspaper.article.ArticleException as ae:
+            print("article download parse nlp failed")
+            print(ae)
+            
+    if not article.summary:
+        print("article.summary가 비었습니다")
+        return (" ", "Sorry. I failed to get the document.")
     else:
-            pass
-    print("여기까진 온거니?\n")
-    trans_summary = papago_translate(article.summary, 'ko')
-    print(trans_summary)
-    return (article.summary, trans_summary)
+        print(article.summary)
+        trans_summary = papago_translate(article.summary, 'ko')
+        print(trans_summary)
+        return (article.summary, trans_summary)
   
 
 def crawling_main_fun(search_word):
