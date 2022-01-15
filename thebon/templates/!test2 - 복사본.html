@@ -6,7 +6,7 @@
         <div class="row section featured topspace">
             {% for key, value in large_dic.items()%}
             <h2 class="section-title"><span>
-                    <p style="font-size:50%">{{ key }}</p>
+                    <p style="font-size:50%">{{ key }} 검색 결과는 {{value.shape[0]}}개입니다</p> 
                 </span></h2>
             <ul>
                 {% for index, row in value.iterrows() %}
@@ -22,8 +22,13 @@
                             </td>
 
                             <td style="width: 20%;" rowspan="3">
+                                <!-- <button type="button" class="btn btn-primary" style="width: 70%;"
+                                    onclick="window.open('http://webtong.kr','Summary','width=830,height=600,location=no,status=no,scrollbars=yes');">Summary</button> -->
+
+                                    
                                 <button type="button" class="btn btn-primary" style="width: 70%;"
-                                    onclick="window.open('http://webtong.kr','Summary','width=830,height=600,location=no,status=no,scrollbars=yes');">Summary</button>
+                                    onclick="window.open('{{ url_for('crawling.more_info')}}','Summary','width=830,height=600,location=no,status=no,scrollbars=yes');">Summary</button>
+
                                 <p id="Summary"></p>
                             </td>
                         </tr>

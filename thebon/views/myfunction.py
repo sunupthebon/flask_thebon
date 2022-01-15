@@ -33,7 +33,7 @@ def more_info(article_url) :
             
             if not article.summary:
                 print("article.summary가 비었습니다")
-                return ("Sorry. I failed to get the document.")
+                return (" ", "Sorry. I failed to get the document.")
 
             else:
                 print(article.summary)

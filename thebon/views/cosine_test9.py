@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import linear_kernel
 # import google_news_search05
 from datetime import datetime
 import os
-from newspaper import Article
+
 
 
 #my_cosine_similarity3는 구글 뉴스기사(x_list)와 비교, my_cosine_similarity는 크롤링 데이터간 비교
