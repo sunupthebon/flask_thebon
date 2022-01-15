@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script type="text/javascript">
+        function SaveWord(index){
+            if (index == 1) {            
+                document.submitForm.action="{{ url_for('crawling.updatedb') }}";
+                }
+            if (index == 2) {
+                document.submitForm.action="{{ url_for('crawling.multi_search') }}";
+                }
+            document.submitForm.submit();
+        }
+        
+        function SoloSearch(){
+            if ($('#solo_name').val().trim() != '') {                
+                document.soloform.action="{{ url_for('crawling.solo_search') }}";
+                document.soloform.submit();
+                }
+            else {
+                alert("검색어를 입력해 주세요")
+                $('#solo_name').focus();
+                }
+        }
+</script>
+
+<div class="container" style="
+    margin-left: 128px;
+    margin-top: 42px;
+    margin-bottom: 48px;">
+    <form name="soloform" action="{{ url_for('crawling.updatedb') }}" method="POST">
+        <div class="form-solo" id="form-solo">
+            <div class="row">
+                <div class="col-md-5">
+                    <input type="text" name="solo_name" id="solo_name" placeholder="Enter Keyword" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-outline-info" onclick="SoloSearch()">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container" style="
+    margin-left: 128px;
+    margin-top: 53px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+">
+<!--    <form name="submitForm" action="{{ url_for('crawling.updatedb') }}" method="POST">-->
+    <form name="submitForm" method="POST">
+        <div class="form-group" id="dynamic_form">
+            <div class="row">
+                <div class="col-md-5">
+                    <input type="text" name="p_name" id="p_name" placeholder="Enter Keyword" class="form-control">
+                </div>
+                <div class="button-group">
+                    <a href="javascript:void(0)" class="btn btn-primary" id="plus5">Add More</a>
+                    <a href="javascript:void(0)" class="btn btn-danger" id="minus5">Remove</a>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-success" onclick="SaveWord(1)">Save</button>
+        <button type="submit" class="btn btn-outline-info" onclick="SaveWord(2)">Search</button>
+    </form>
+</div>
+
+<!-- jQuery JS -->
+<script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
+
+<script>
+        $(document).ready(function() {
+        	var dynamic_form =  $("#dynamic_form").dynamicForm("#dynamic_form","#plus5", "#minus5", {
+		        limit:1024,
+		        formPrefix : "dynamic_form",
+		        normalizeFullForm : false
+		    });
+
+        	dynamic_form.inject([
+                {% if search_list %}
+                    {% for i in search_list %}
+        	            {p_name: '{{i.search_word}}'},
+            	    {% endfor %}
+// <!--            	    {p_name: '  '},-->
+            	{% endif %}
+        	    ]);
+
+		    $("#dynamic_form #minus5").on('click', function(){
+
+		        // alert ("minus5  ")
+		    	var initDynamicId = $(this).closest('#dynamic_form').parent().find("[id^='dynamic_form']").length;
+		    	if (initDynamicId === 2) {
+		    		$(this).closest('#dynamic_form').next().find('#minus5').hide();
+		    	}
+		    	$(this).closest('#dynamic_form').remove();
+		    });
+
+		    $('form').on('submit', function(event){
+	        	var values = {};
+				$.each($('form').serializeArray(), function(i, field) {
+				    values[field.name] = field.value;
+				});
+				console.log(values)
+        		event.preventDefault();
+        	})
+
+
+        	$("#dynamic_form #search5").on('click', function(){
+                alert ("dynamic_form You clicked")
+            })
+
+
+            $(".form-button").click(function () {
+                alert ("You clicked")
+            })
+});
+
+</script>
+
+{% endblock %}
+

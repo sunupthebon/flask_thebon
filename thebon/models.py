@@ -28,6 +28,18 @@ class Machine_learning(db.Model):
     cos_val = db.Column(db.Integer)
     ml_val = db.Column(db.Integer)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    p_member = db.Column(db.Integer)
+    search_word = db.Column(db.String(150))
 
+class User_data(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user = db.relationship('User', backref=db.backref('User_set', cascade='all, delete-orphan'))  # 역참조가 가능하도록 설정함
+    search_word = db.Column(db.String(150), nullable=False)
 
 

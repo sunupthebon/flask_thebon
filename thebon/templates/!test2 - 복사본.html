@@ -6,7 +6,7 @@
         <div class="row section featured topspace">
             {% for key, value in large_dic.items()%}
             <h2 class="section-title"><span>
-                    <p style="font-size:50%">{{ key }} 검색 결과는 {{value.shape[0]}}개입니다</p>
+                    <p style="font-size:50%">{{ key }}</p>
                 </span></h2>
             <ul>
                 {% for index, row in value.iterrows() %}
@@ -20,14 +20,12 @@
                                             row.title }}</a></span>
                                 </div>
                             </td>
-                            <form name="form">
-                                <td style="width: 20%;" rowspan="3">
-                                    <input type=hidden name="art_url" value="{{row.link}}">
-                                        <button type=button" class="btn btn-primary" style="width: 70%;"
-                                        onclick="javascript:openWindowPop(this.form);">Summary</button>
-                                    <p id="Summary"></p>
-                                </td>
-                            </form>
+
+                            <td style="width: 20%;" rowspan="3">
+                                <button type="button" class="btn btn-primary" style="width: 70%;"
+                                    onclick="window.open('http://webtong.kr','Summary','width=830,height=600,location=no,status=no,scrollbars=yes');">Summary</button>
+                                <p id="Summary"></p>
+                            </td>
                         </tr>
                         <tr>
                             <td style="width: 80%;">
@@ -47,25 +45,5 @@
             {% endfor %}
         </div>
 </main>
-
-<script language="javascript">
-    function openWindowPop(frm) {
-        var url = "{{ url_for('crawling.more_info')}}";
-        var title = "summary";
-        
-        var popupY = "asdasd"
-
-        // var xPos = (document.body.offsetWidth) - w;
-        // var yPos = (document.body.offsetHeight/2) - (h/2);
-        var status = "width=685, height=420, leftmargin=400, topmargin=200";
-        // window.open("", title, status, left="+xPos+", top="+yPos+");
-        window.open("", title, status);
-
-        frm.target = title;
-        frm.action = url;
-        frm.method = "POST";
-        frm.submit();
-    }
-</script>
 
 {% endblock %}

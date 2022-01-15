@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <form action="{{ url_for('crawling.save') }}" method="POST">
+        <div class="form-group" id="dynamic_form">
+            <div class="row">
+                <div class="col-md-5">
+                        <input type="text" name="p_name" id="p_name" placeholder="Enter Keyword" class="form-control">
+<!--                    <input type="text" name="p_name">-->
+                </div>
+                <div class="button-group">
+                    <a href="javascript:void(0)" class="btn btn-primary" id="plus5">Add More</a>
+                    <a href="javascript:void(0)" class="btn btn-danger" id="minus5">Remove</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12 text-center">
+                <br/>
+                <button class="btn btn-info btn-md" type="submit">Add Project</button>
+                <button class="btn btn-danger btn-md" type="reset">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- jQuery JS -->
+<script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
+
+<script>
+        $(document).ready(function() {
+        	var dynamic_form =  $("#dynamic_form").dynamicForm("#dynamic_form","#plus5", "#minus5", {
+		        limit:10,
+		        formPrefix : "dynamic_form",
+		        normalizeFullForm : false
+		    });
+
+        	dynamic_form.inject([
+
+        	    {p_name: '1111111'},
+        	    {p_name: 'Karshal'},
+        	    {p_name: 'suggnup'}
+<!--                {% if search_list %}-->
+<!--                    {% for i in search_list %}-->
+<!--        	            {p_name: '{{i.search_word}}'},-->
+<!--            	    {% endfor %}-->
+<!--            	{% endif %}-->
+
+        	    ]);
+
+
+		    $("#dynamic_form #minus5").on('click', function(){
+		    	var initDynamicId = $(this).closest('#dynamic_form').parent().find("[id^='dynamic_form']").length;
+		    	if (initDynamicId === 2) {
+		    		$(this).closest('#dynamic_form').next().find('#minus5').hide();
+		    	}
+		    	$(this).closest('#dynamic_form').remove();
+		    });
+
+		    $('form').on('submit', function(event){
+	        	var values = {};
+				$.each($('form').serializeArray(), function(i, field) {
+				    values[field.name] = field.value;
+				});
+				console.log(values)
+        		event.preventDefault();
+        	})
+        });
+</script>
+{% endblock %}

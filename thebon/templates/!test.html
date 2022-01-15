@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main id="main">
+    <div class="container" border >
+        <div class="row section featured topspace">
+            {% if not crawling_df.empty %}
+            <h2 class="section-title"><span><p style="font-size:60%">{{search_word}} 검색 결과는 {{crawling_df.shape[0]}}개입니다</p></p></span></h2>
+            <ul>
+                <div class="row">
+                    {% for index, row in crawling_df.iterrows() %}
+                    <table style="border-collapse: collapse; width: 65%; height: 110px;" border="0" class="mce-item-table"
+                        data-mce-style="border-collapse: collapse; width: 65%; height: 110px;">
+                        <tr>
+                            <td style="width: 30%;">
+                                <div>
+                                    <span style="font-style: italic ;"><a href="{{row.link}}" target='_blank'>{{ row.title }}</a></span>
+                                </div>
+                            </td>
+                
+                            <td style="width: 20%;" rowspan="3">
+                                <button type="button" class="btn btn-primary" style="width: 70%;"
+                                    onclick="window.open('http://webtong.kr','Summary','width=830,height=600,location=no,status=no,scrollbars=yes');">Summary
+                                </button>
+                                <p id="Summary"></p>
+                            </td>
+                        </tr>
+                
+                        <tr>
+                            <td style="width: 80%;">
+                                <div>{{ row.snippet_tran }}</div>
+                            </td>
+                        </tr>
+                
+                        <tr>
+                            <td style="width: 80%;">
+                                <div>{{ row.snippet }}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                {% endfor %}
+                </div>
+            </ul>
+            {% else %}
+            <p>검색결과가 없습니다.</p>
+            {% endif %}
+        </div>
+</main>
+
+{% endblock %}
